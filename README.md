@@ -244,6 +244,107 @@ create-react-app默认将JS当作JSX处理；</br>
 
 
 
+## React组件
+
+### 组件
+
+#### Element V.S. Component
+
+**元素与组件**
+
+`const div = React.createElement('div',...)`</br>
+这是一个React元素(d小写)
+
+`const Div = ()=>React.createElement('div'..)`</br>
+这是一个React组件(D大写)
+
+**什么是组件**
+
+能与其他物件组合起来的物件就是组件；</br>
+就目前而言，一个返回React元素的函数就是组件；</br>
+在Vue里，一个构造选项就可以表示一个组件；</br>
+
+#### React两种组件
+
+**一、函数组件**
+
+```
+function Weclome(props){
+   return <h1>Hello,{props.name}</h1>;
+}
+使用方法： <Welcome name="wanti" />
+```
+
+**二、类组件**
+
+```
+class Welcome extends React.Component {
+  render() {
+      return <h1>Hello,{this.props.name}</h1>
+   }
+}
+使用方法：<Weclcom name="wanti"/>
+```
+
+**<Welcome />**
+
+* React.createElement的逻辑
+如果传入一个字符串'div',则会创建一个div;</br>
+如果传入一个函数，则会调用该函数，获取其返回值；</br>
+如果传入一个类，则在类前面加个new(这会导致执行constructor),获取一个组件对象，然后调用对象的render方法，获取其返回值；</br>
+
+**类组件注意事项**
+
+* this.state.n += 1无效？
+其实n已经改变了，只是UI不会自动更新而已；</br>
+调用setState才会触发UI更新(异步更新)；</br>
+因为React没有像Vue监听data一样监听state;</br>
+
+* setState会异步更新UI
+setstate之后，state不会马上改变，立马读state会失败；</br>
+更推荐的方式是setState(函数)；</br>
+
+#### 两种编程模型
+
+**Vue的编程模型**
+
+一个对象，对应一个虚拟DOM。当对象的属性改变时，把属性相关的DOM节点全部更新。
+
+注：Vue为了其他考量，也引入了虚拟DOM和DOM Diff.
+
+**React的编程模型**
+
+一个对象，对应一个虚拟DOM；另一个对象，对应另一个虚拟DOM。对比两个虚拟DOM，找不同(DON diff)最后局部更新DOM。
+
+### 事件绑定
+
+```
+class Son extends React.Component{
+   addN = () => this.setState({n: this.state.n+1});//写法一
+   this.addN = ()=> this.setState
+   ({n :this.state.n+1})；//写法二
+}
+
+//写法一和写法二完全等价
+
+```
+该类写法中的函数是对象本身的属性，这意味这每个Son组件都有自己的addN,如果有两个Son,就有两个addN
+
+```
+class Son extends React.Component{
+   addN(){    
+        this.setState({n:this.state.n + 1})
+        }//写法一
+   addN: function(){
+        this.setState({n:this.state.n+1})
+        }、、写法二
+}
+   
+ 写法一和写法二完全等价
+ 
+```
+该类写法中的函数是对象的共用属性(也就是原型上的属性)，也就是说Son组件共用一个addN
+
 
 
 
