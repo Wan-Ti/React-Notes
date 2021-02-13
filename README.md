@@ -347,6 +347,236 @@ class Son extends React.Component{
 
 
 
+## Class组件详解
+
+### 两种方式创建Class组件
+
+**ES5方式(过时)**
+
+```
+import React from 'react'
+
+const A = React.createClass({
+   render() {
+      return (
+          <div>hi</idv>
+      )
+   }
+})
+
+export default A
+```
+
+**ES6方式**
+
+```
+import React from 'react';
+
+class B extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+       return (
+          <div>hi</div>
+       )
+    }
+}
+export default B;
+```
+
+### Props-外部数据
+
+**Props的作用**
+
+* 接受外部数据
+只能读不能写；</br>
+外部数据由父组件传递；
+
+* 接受外部函数
+在恰当的时机，调用该函数；</br>
+该函数一般是父组件的函数；
+
+### State & setState-内部数据
+
+```
+初始化State
+
+class B extends React.Component{
+   constructor(props) {
+      super(props);
+      this.state = {
+         users: {name:'wanti',age:18}
+      }
+    }
+    render(){/*...*/}
+}
+```
+
+**读写State**
+
+* 读用this.state 
+`this.state.xxx.yyy.zzz`
+
+* 写用this.setState(???,fn)
+
+this.setState(newState,fn);</br>
+注意setState不会立刻改变this.state,会在当前代码运行完后，再去更新this.state,从而触发UI更新；</br>
+
+this.setState((state,props)=>newState,fn);</br>
+这种方式的state反而更易于理解；</br>
+
+fn会在写入成功后执行；</br>
+
+
+### 生命周期
+
+**类比如下代码**
+
+```
+let div = document.createElement('div')
+//这是div的create/construct过程
+
+div.textContent = 'hi'
+//这是初始化state
+
+document.body.appendChild(div)
+//这是div的mount过程
+
+div.textContent = 'hi2'
+//这是div的update过程
+
+div.remove()
+//这是div的unmount过程
+```
+
+React组件中也有这些过程，我们称之为生命周期
+
+### 生命周期
+
+**函数列表**
+
+* constructor()
+* static getDerivedStateFromProps()
+* shouldComponentUpdate()
+* render()
+* getSnapshotBeforeUpdate()
+* componentDidMount()
+* componentDidUpdate()
+* componentWillUnmount()
+* static getDerivedStateFromError()
+* componentDidCatch
+
+**生命周期-必会**
+
+* 函数列表
+
+constructor()-在这里初始化state；</br>
+shouldComponentUpdate()-return false组织更新;</br>
+render()-创建虚拟DOM;</br>
+componentDidMount()-组件已出现在页面;</br>
+componentDidUpdate()-组件已更新;</br>
+componentWillUnmount()-组件将死;</br>
+
+#### constructor
+
+**用途**
+
+初始化props;</br>
+初始化state,但此时不能调用setState;</br>
+用来写bind this </br>
+```
+constructor() {
+   ...
+   this.onClick = this.onClick.bind(this)
+}
+
+使用新语法代替
+onClick = () => {}
+constructor(){ ... }
+```
+
+#### shouldComponentUpdate
+
+**用途**
+
+返回true表示不阻止UI更新；</br>
+返回false表示阻止UI更新；</br>
+
+**作用**
+
+它允许我们手动判断是否要进行组件更新，我们可以根据应用场景灵活地设置返回值，以避免不必要的更新
+
+#### render
+
+**用途**
+
+展示视图：
+   `return(<div>...</div>)`</br>
+只能有一个根元素；</br>
+如果有两个根元素，就要用<React.Fragment>;</br>
+<React.Fragment />可以缩写为<></></br>
+
+**技巧**
+
+render里面可以写if...else;</br>
+render里面可以写?:表达式；</br>
+render里面不能直接写for循环，需要使用数组；</br>
+render里面可以写array.map(循环)；</br>
+
+#### componentDidMount()
+
+**用途:**
+
+在元素插入页面后执行代码，这些代码依赖DON；</br>
+例如想获取div的高度，就可以在这里写；</br>
+此处可以发起加载数据的AJAX请求；</br>
+首次渲染会执行此钩子；</br>
+
+#### componentDidUpdate()
+
+**用途：**
+
+在视图更新后执行代码；</br>
+此处也可以发起AJAX请求，用于更新数据；</br>
+首次渲染不会执行此钩子；</br>
+在此处setState可能会引起无限循环，除非放在if里；</br>
+若shouldComponentUpdate返回false,则不出发此钩子；</br>
+
+#### componentWillUnmount
+
+**用途**
+
+组件将要被移出页面然后被销毁时执行代码；</br>
+unmount过的组件不会再次mount;
+
+**举例**
+
+如果你在c..DidMount里面监听了window scroll;
+那么你就要在c...WillUnmount里面取消了监听
+
+如果你在c...DidMount里面创建了Timer;
+那么你就要在c...WillUnmount里面取消了timer;
+
+谁污染谁治理；
+
+#### 生命周期回顾
+
+**函数列表**
+
+* constructor() - 在这里初始化state
+* shouldComponentUpdate() - return false组织更新
+* render() - 创建虚拟DOM
+* componentDidMount() - 组件已出现在页面
+* componentDidUpdate() - 组件已更新
+* componentWillUnmount() - 组件将死
+
+*不要忘了renturn true*
+
+
+####
+
+
 
 
 
