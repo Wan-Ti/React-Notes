@@ -576,7 +576,54 @@ unmount过的组件不会再次mount;
 
 ####
 
+## React函数组件
 
+### 创建方式
+
+**函数组件**
+```
+const Hello = (props) => {
+    return <div>{props.message}</div>
+}
+
+const Hello = props => <div>{props.message}</div>
+
+function Hello(props){
+    return <div>{props.message}</div>
+}
+```
+
+**函数组件代替class组件**
+
+* 面临两个问题：
+
+函数组件没有state;</br>
+函数组件没有生命周期；</br>
+
+* 没有State
+React v16.8.0推出Hooks API,其中一个API叫做useState可以解决问题。
+
+* 没有生命周期
+React v16.8.0推出Hooks API,其中一个API叫做useEffect可以解决问题。
+
+### useEffect
+
+```
+模拟componentDidMount
+useEffect(()->{ console.log('第一次渲染') },[])
+
+模拟componentDidUpdate
+useEffect(()=> { console.log('任意属性变更')});
+useEffect(()=>{ console.log('n变了')},[]);
+
+模拟componentWillUnmount
+useEffect(()=>{
+   console.log('第一次渲染')
+   return ()=>{
+      console.log('组件要死了')
+   }
+})
+```
 
 
 
